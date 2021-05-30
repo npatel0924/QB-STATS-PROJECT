@@ -1,7 +1,3 @@
-print("This project was made by Nikunj Patel for AP Computer Science Principles.")
-print("This program allows the user to input statistics for a quarterback in a game of football and outputs all basic")
-print("and advanced statistics once the program is done running.")
-
 QB_NAME = input("What is the QB's name?")
 print(QB_NAME)
 RUSH_ATTEMPTS = 0
@@ -14,17 +10,15 @@ PASS_TD = 0
 RUSH_TD = 0
 SACKS = 0
 SS = 0
-INT = 0
+INTC = 0
 INC = 0
 COM = 0
 FUM = 0
 TD = 0
-RSH_YRD_PER_ATT = 0
-PASS_YRD_PER_ATT = 0
-INT_PCT = 0
-COMP_PCT = 0
-PASS_TD_PCT = 0
 QBR = 0
+
+SACK_LIST = ["Number", "Of", "Sacks", "="]
+FUM_LIST = ["Number", "Of", "Fumbles", "="]
 
 GAME_OVER = 1  # 0 = Game over, 1 = Game Not Over
 
@@ -35,6 +29,7 @@ while GAME_OVER == 1:
     if PLAYTYPE == "P":
         PASS_TYPE = input("Is it complete (0), incomplete (1), or intercepted (2)?")
         print("You have selected the pass type = to", PASS_TYPE)
+        PASS_ATTEMPTS = PASS_ATTEMPTS + 1
 
         if PASS_TYPE == "0":
             CURRENT_PASS_YARDS = input("How many yards passed? :")
@@ -58,12 +53,13 @@ while GAME_OVER == 1:
 
         if PASS_TYPE == "2":
             print("Intercepted")
-            INT = INT + 1
-            print(INT)
+            INTC = INTC + 1
+            print(INTC)
             print("Thank You")
 
     if PLAYTYPE == "R":
         CURRENT_RUSH_YARDS = input("How many yards Rushed?")
+        RUSH_ATTEMPTS = RUSH_ATTEMPTS + 1
         RUSH_YARDS = int(CURRENT_RUSH_YARDS) + int(RUSH_YARDS)
         print(RUSH_YARDS)
         DID_SCORE = input("Did QB Score? Y/N")
@@ -95,8 +91,28 @@ while GAME_OVER == 1:
         SACKS = SACKS + 1
         print(SACKS)
         print("Thank You")
+
     GAME_OVER = int(input("Is game over. Please type 1 for no and 0 for yes: "))
     print(GAME_OVER)
+
+
+def qbr_calc_function(com, pass_attempts, pass_td, intc, pass_yards):
+    qbr_pt_1 = ((com/pass_attempts)-0.3)*5
+    qbr_pt_2 = ((pass_yards/pass_attempts)-3)*0.25
+    qbr_pt_3 = ((pass_td/pass_attempts)*20)+2.375
+    qbr_pt_4 = (intc/pass_attempts)*25
+    qbr = ((qbr_pt_1 + qbr_pt_2 + qbr_pt_3 - qbr_pt_4)/6)*100
+    return qbr
+
+
+QBR = qbr_calc_function(COM, PASS_ATTEMPTS, PASS_TD, INTC, PASS_YARDS)
+QBR = round(QBR, 1)
+
+RSH_YRD_PER_ATT = RUSH_YARDS/RUSH_ATTEMPTS
+PASS_YRD_PER_ATT = PASS_YARDS/PASS_ATTEMPTS
+INT_PCT = (INTC/PASS_ATTEMPTS) * 100
+COMP_PCT = (COM/PASS_ATTEMPTS) * 100
+PASS_TD_PCT = (PASS_TD/PASS_ATTEMPTS) * 100
 
 print("Game is over")
 print("Please read the QB stats below for", QB_NAME)
@@ -108,7 +124,7 @@ print("Completion Percentage =", COMP_PCT)
 print("Passing Yards =", PASS_YARDS)
 print("Yards Per Attempt =", PASS_YRD_PER_ATT)
 print("Number of Passing TDs =", PASS_TD)
-print("Number of INT =", INT)
+print("Number of INT =", INTC)
 print("Passing TD Percentage =", PASS_TD_PCT)
 print("Interception Percentage =", INT_PCT)
 print("-------------------------Rushing Stats-----------------------------")
@@ -117,6 +133,6 @@ print("Rushing Yards =", RUSH_YARDS)
 print("Rushing Yards Per Attempt =", RSH_YRD_PER_ATT)
 print("Rushing TDs =", RUSH_TD)
 print("-------------------------Sacks and Fumble Stats--------------------")
-print("Number Of Sacks =", SACKS)
-print("Number Of Fumbles Lost =", FUM)
+print(SACK_LIST[0], SACK_LIST[1], SACK_LIST[2], SACK_LIST[3], SACKS)
+print(FUM_LIST[0], FUM_LIST[1], FUM_LIST[2], FUM_LIST[3], FUM)
 print("-------------------------Stats Over--------------------------------")
